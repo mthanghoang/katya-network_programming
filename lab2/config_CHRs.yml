@@ -1,0 +1,25 @@
+- name: config CHRs
+  hosts: CHRs
+  gather_facts: false
+  tasks:
+
+    - name: Add new user
+      community.routeros.command:
+        commands:
+          - /user/add name=katya group=full password=katya
+
+    - name: NTP
+      community.routeros.command:
+        commands:
+          - /system/ntp/client/set enabled=yes servers=132.163.96.5
+
+    - name: Get index
+      set_fact:
+        index: "{{ groups['CHRs'].index(inventory_hostname) | int + 1}}"
+
+    - name: OSPF
+      community.routeros.command:
+        commands:
+        - /routing/ospf/instance/add name=instance0 version=2 router-id={{ index }}.{{ index }}.{{ index }}.{{ index }}
+        - /routing/ospf/area/add name=area0 area-id=0.0.0.0 instance=instance0
+        - /routing/ospf/interface-template/add interfaces=all area=area0 type=ptp
