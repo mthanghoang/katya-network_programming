@@ -1,0 +1,24 @@
+- name: Add devices' serial number to Netbox
+  hosts: CHRs
+  gather_facts: false
+  tasks:
+
+    - name: Serial number
+      community.routeros.command:
+        commands:
+          - /system/license/print
+      register: serial_num
+
+    - name: Devices list
+      set_fact:
+        index: "{{ groups['CHRs'].index(inventory_hostname) | int }}"
+        CHRs: "{{ query('netbox.netbox.nb_lookup', 'devices', api_endpoint='http://192.168.0.4:8000',
+                  token='9132aca2ed44d5eb036b08d26b4f7bc3719b0efc') }}"
+
+    - name: Add serial number
+      netbox_device:
+        netbox_url: http://192.168.0.4:8000
+        netbox_token: 9132aca2ed44d5eb036b08d26b4f7bc3719b0efc
+        data:
+          name: "{{ CHRs[index | int].value.name }}"
+          serial: "{{ serial_num.stdout_lines[0][0] | regex_replace('system-id:', '') }}"
