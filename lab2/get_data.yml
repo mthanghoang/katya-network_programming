@@ -1,0 +1,28 @@
+- name: Gather CHRs' settings
+  hosts: CHRs
+  gather_facts: false
+  tasks:
+
+  - name: Facts
+    community.routeros.facts:
+      gather_subset:
+        - routing
+        - interfaces
+
+  - name: Devices' settings
+    community.routeros.command:
+      commands:
+        - /export
+    register: settings
+
+  - name: Save to file
+    copy:
+      content: "{{ settings.stdout_lines }}"
+      dest: "{{ item }}"
+    loop:
+      - ~/setting_CHR1.txt
+      - ~/setting_CHR2.txt
+
+  - name: OSPF topology
+    debug:
+      var: ansible_net_ospf_neighbor
