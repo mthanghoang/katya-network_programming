@@ -52,7 +52,7 @@ Date finished:
 Создан плейбук, который собирает данные по OSPF топологии и полный конфиг двух CHR. Конфиг устройства сохранен в отдельные файлы  
 ![image](https://user-images.githubusercontent.com/61542577/205422380-e7bc94db-ea39-449f-9230-18e8f865a705.png)
 
-Запущен сценарий.  
+Запущен плейбук.  
 ![image](https://user-images.githubusercontent.com/61542577/205422440-f0055961-1456-45a3-9ce9-c7fbd6847610.png)
 
 ### 3. Результаты
