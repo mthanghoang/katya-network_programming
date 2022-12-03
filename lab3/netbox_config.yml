@@ -1,0 +1,30 @@
+- name: Configure CHRs based on data from Netbox
+  hosts: CHRs
+  gather_facts: false
+  tasks:
+
+    - name: Data from Netbox
+      set_fact:
+        lo_addr: "{{ query('netbox.netbox.nb_lookup', 'ip-addresses', api_endpoint='http://192.168.0.4:8000',
+                  api_filter='role=loopback',
+                  token='9132aca2ed44d5eb036b08d26b4f7bc3719b0efc') }}"
+        index: "{{ groups['CHRs'].index(inventory_hostname) | int }}"
+
+    - name: Save data to variables
+      set_fact:
+        name: "{{ lo_addr[index | int].value.assigned_object.device.name }}"
+        ip_addr: "{{ lo_addr[index | int].value.address }}"
+
+    - name: Change devices' name and add IP address
+      community.routeros.command:
+        commands:
+          - /ip/address/print detail
+          - /ip/address/add address={{ ip_addr }} interface=lo
+          - /ip/address/print detail
+          - /system/identity/set name="{{ name }}"
+          - /system/identity/print
+      register: config
+
+    - name: Show updated name and added IP address
+      debug:
+        var: config.stdout_lines
