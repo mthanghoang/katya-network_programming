@@ -14,7 +14,7 @@ Date finished:
 ### 1. Поднять Netbox на дополнительной VM
 Создана новая VM, которая соединена с VM на Яндексе через Wireguard туннель.
 
-Поднять Netbox на дополнительной VM.  
+Поднять Netbox на новой VM.  
 ![image](https://user-images.githubusercontent.com/61542577/205424959-0e933652-2ffe-446c-add2-8a075f44e42f.png)
 
 Используя браузер, подключить к Netbox по HTTPS.  
@@ -30,6 +30,7 @@ Date finished:
 ![image](https://user-images.githubusercontent.com/61542577/205425482-b7b3ba67-040f-40eb-9e4f-effdab80a2b2.png)
 
 ### 3. Сохранить данные с Netbox в отдельный файл, используя Ansible
+Редактирован файл hosts  
 
  
 
