@@ -1,0 +1,16 @@
+ name: Netbox data
+  hosts: Netbox
+  gather_facts: false
+  tasks:
+
+    - name: list all devices stored on Netbox
+      set_fact:
+        CHRs: "{{ query('netbox.netbox.nb_lookup', 'devices', api_endpoint='http://192.168.0.4:8000',
+                  token='9132aca2ed44d5eb036b08d26b4f7bc3719b0efc') }}"
+
+    - name: save
+      delegate_to: 127.0.0.1
+      copy:
+        content:
+          - "{{ CHRs }}"
+        dest: ~/netbox_data.json
