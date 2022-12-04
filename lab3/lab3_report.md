@@ -66,6 +66,7 @@ Date finished:
 ## РЕЗУЛЬТАТЫ
 Получаем файл netbox_data.json с данными, собранными с Netbox.  
 Получаем связь по следующей схеме.  
+![image](https://user-images.githubusercontent.com/61542577/205472341-9683aefe-c27c-4f70-afda-3655b78a1705.png)
 
 
 
