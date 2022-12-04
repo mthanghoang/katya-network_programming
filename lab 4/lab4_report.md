@@ -65,6 +65,7 @@ Date finished:
 Перейти на папку второго задания.  
 ![image](https://user-images.githubusercontent.com/61542577/205469900-ff2eb0e5-82a0-4d47-b06c-5cc908093e5e.png)
 
+### Реализовать туннелирование
 Файл **basic_tunnel.p4** является решением предыдущего задания. Полная реализация файла basic_tunnel.p4 сможет выполнять пересылку на основе содержимого пользовательского заголовка инкапсуляции, а также выполнять обычную IP-пересылку, если заголовок инкапсуляции не существует в пакете.
 
 1. Добавлен новый тип заголовка myTunnel_t, который содержит два 16-битных поля: proto_id и dst_id.  
@@ -78,4 +79,33 @@ Date finished:
  dst_id.  
  ![image](https://user-images.githubusercontent.com/61542577/205470104-a9387e2c-301b-4e97-af25-111f29cae65f.png)
 
+4. Добавлена фукнция **myTunnel_forward**, которая обновляет выходной порт для пакета.  
+![image](https://user-images.githubusercontent.com/61542577/205470145-8b2b0b31-8f99-4012-aeef-ce968903242d.png)
+
+5. Обновлена функция apply(), чтобы она могла вызывать либо таблицу myTunnel_exact, либо таблицу ipv4_lpm при необходимости.  
+![image](https://user-images.githubusercontent.com/61542577/205470195-e7f578b0-e175-4cf9-a100-8f188a3acc83.png)
+
+6. Обновлен депарсер.  
+![image](https://user-images.githubusercontent.com/61542577/205470221-df908b2a-dc9d-4084-87fd-cb2fe8da58be.png)
+
+7. Таблица **myTunnel_exact** еще не заполнена. Заполнить таблицу на основе схеме связи, редактировав файл s1-runtime.json, s2-runtime.json, s3-runtime.json  
+![image](https://user-images.githubusercontent.com/61542577/205470333-55e9e083-f77b-4280-9f34-1fa1eb72389c.png)
+
+### Запустить решение
+1. Запустить Mininet.
+2. Открыть 2 терминала для хостов h1 и h2.  
+![image](https://user-images.githubusercontent.com/61542577/205470424-7e68b8d6-7ca6-4dc1-bfaf-26a1d2a89b79.png)
+
+3. Запустить сервер на хосте h2.  
+![image](https://user-images.githubusercontent.com/61542577/205470453-2d95e3b2-b0ef-4855-8ce9-d0175c015210.png)
+
+4. На хосте h1 отправлять хосту h2 пакет без туннелирования, указав ip адрес хоста h2.  
+![image](https://user-images.githubusercontent.com/61542577/205470530-5bbed358-dbf7-4eab-9d75-6754356497f6.png)  
+При этом пакет состоит из заголовка Ethernet, заголовка IP, заголовка TCP и сообщения "hello h2 no tunneling".
+
+5. Теперь на хосте h1 отправлять хосту h2 туннелированный пакет. В этом случае IP адрес не важен, важен только id назначения. Коммутатор больше не использует заголовок IP для маршрутизации, когда заголовок MyTunnel находится в пакете.  
+![image](https://user-images.githubusercontent.com/61542577/205470624-b1c47357-3130-4594-975c-93b05859590f.png)
+
+## ВЫВОД
+В ходе выполнения лабораторной работы была создана виртуальная машина для работы с P4. После чего был зучен синтаксис языка программирования P4 и выполнены 2 задания обучающих задания.
 
